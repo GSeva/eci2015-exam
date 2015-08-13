@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Priveleges 1</title>
+</head>
+<body>
+
+</body>
+
+<script type="text/javascript">
+
+COWL.enable();
+
+var p1 = new FreshPrivilege();
+var p2 = new FreshPrivilege();
+var l1 = p1.asLabel;
+var l2 = p2.asLabel;
+
+document.write('<p>l1 ∧ l2 ⊑C p2 l2</p>');
+
+COWL.privacyLabel = l1.and(l2);
+document.write('<p>' + COWL.privacyLabel.toString() + '</p>');
+COWL.privileges = p2;
+COWL.privacyLabel = l2;
+document.write('<h2>⊑</h2><p>' + COWL.privacyLabel.toString() + '</p>');
+
+</script>
+
+</html>

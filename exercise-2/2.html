@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Integrity 2</title>
+</head>
+<body>
+
+</body>
+
+
+<script type="text/javascript">
+
+COWL.enable();
+
+var alice = new Label('http://alice.com:8080');
+var bob = new Label('http://bob.com:9090');
+
+// This results in an error: i can't assign more confidential label to trustLabel
+// it only works on http://bob.com:9090
+// COWL.trustLabel = bob;
+
+document.write('<p>http://bob.com:9090 ⊑I http://alice.com:8080 ∧ http://bob.com:9090</p>');
+document.write('subsumes: ' + bob.subsumes(alice.and(bob)));
+
+</script>
+
+</html>

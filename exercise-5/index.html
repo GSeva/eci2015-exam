@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charser="utf-8">
+  <title>Labeled XHR</title>
+</head>
+
+<body>
+
+<p>Hacer request a: </p>
+<form id="form" action="/">
+  <input id="message" type="text" value="https://cors-test.appspot.com/test" style="width: 400px">
+  <button type="submit">Submit!</button>
+</form>
+
+<p id="feedback"></p>
+
+<button id="showMessage">Abrir mensaje</button>
+
+<p id="result"></p>
+
+<button onclick="checkLabel()">Verificar label</button>
+<p id="label"></p>
+
+</body>
+
+<script type="text/javascript">
+
+window.onload = function() {
+  COWL.enable();
+
+  var form = document.getElementById('form');
+  var input = document.getElementById('message');
+  var showMessage = document.getElementById('showMessage');
+  var data;
+
+  form.onsubmit = function() {
+    document.getElementById('feedback').innerHTML = 'esperando respuesta...';
+    labeledXHR(input.value);
+    return false;
+  }
+
+  window.addEventListener("message", function(evt) {
+    console.log(evt);
+    document.getElementById('feedback').innerHTML = 'Acabo de recibir ' + evt;
+    data = evt.data;
+  }, false);
+
+  showMessage.onclick = function() {
+    if (data) {
+      COWL.privacyLabel = COWL.privacyLabel.and(data.privacy);
+      document.getElementById('result').innerHTML = data.blob;
+    }
+  }
+
+}
+
+function labeledXHR(url) {
+  var iframe = document.createElement('iframe');
+  iframe.style = 'visibility:hidden;display:none';
+  iframe.src = 'iframeContent.html';
+  document.body.appendChild(iframe);
+  var message = {url: url, origin: window.location.origin};
+  console.log(iframe.contentWindow);
+  iframe.onload = function() {
+    iframe.contentWindow.postMessage(message, window.location.origin);
+  };
+}
+
+function checkLabel() {
+  var message = 'Mi label es ' + COWL.privacyLabel;
+  document.getElementById('label').innerHTML = message;
+}
+
+</script>
+
+</html>

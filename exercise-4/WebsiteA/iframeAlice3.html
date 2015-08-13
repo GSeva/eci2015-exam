@@ -1,0 +1,65 @@
+<html>
+
+<!--
+Course ECI 2015
+Author: Alejandro Russo
+
+Description: Sending a postMessage to
+a Bob's iFrame. COWL
+
+-->
+
+<body>
+
+
+<!-- Bob's iframe -->
+<iframe id="Bob" src="http://bob.com:9090/iframeBob3.html" width="800" height="450" align="right"></iframe>
+
+<br> </br>
+<p> This is Alice origin. </p>
+<p> Write a message to send to Bob's iframe </p>
+
+
+<form id="lAliceForm" action="/">
+	<input type="text" id="lAliceMsg" value="Message">
+	<input type="submit" value="labeled postMessage">
+</form>
+
+<button type="button" onclick="q_label()">Alice label?</button>
+<p id="AliceLabel"> Not queried </p>
+
+<img src="http://alice.com:8080/alice.gif" width="150">
+
+<script>
+window.onload = function () {
+
+  COWL.enable();
+
+	var lmsg = document.getElementById("lAliceMsg") ;
+	lmsg.select();
+
+  var lform = document.getElementById("lAliceForm"),
+	iframeWin = document.getElementById("Bob").contentWindow ;
+
+	lform.onsubmit = function () {
+	  var blob = new LabeledBlob(lmsg.value, window.location.origin) ;
+		iframeWin.postMessage(blob, "http://bob.com:9090");
+		return false;
+	};
+
+};
+
+var q_label = function() {
+	var label = COWL.privacyLabel.toString() ;
+	document.getElementById("AliceLabel").innerHTML = label;
+} ;
+</script>
+
+
+
+
+
+
+</body>
+
+</html>

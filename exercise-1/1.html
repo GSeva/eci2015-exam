@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Privacy 1</title>
+</head>
+<body>
+
+</body>
+
+
+<script type="text/javascript">
+
+COWL.enable();
+console.log(COWL.privacyLabel.toString());
+
+var alice = new Label('http://alice.com:8080');
+var bob = new Label('http://bob.com:9090');
+
+COWL.privacyLabel = bob;
+console.log(COWL.privacyLabel.toString());
+
+document.write('<p>http://alice.com:8080 ∧ http://bob.com:9090 ⊑C http://bob.com:9090</p>');
+document.write('subsumes: ' + COWL.privacyLabel.subsumes(alice.and(bob)));
+
+</script>
+
+</html>

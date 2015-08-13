@@ -1,0 +1,89 @@
+<html>
+
+<!--
+Course ECI 2015
+Author: Alejandro Russo
+
+Description: Sending a postMessage to
+a Bob's iFrame. This is Bob's part!
+
+-->
+
+<body>
+
+<iframe id="Charlie" src="http://charlie.com:5050/iframeCharlie.html" width="400" height="350" align="right"></iframe>
+
+<p id="msg">I've heard nothing yet</p>
+<button type="button" onclick="q_label()">Bob label?</button>
+<p id="BobLabel"> Not queried </p>
+
+<button type="button" onclick="xhr_bob()"> XHR ping</button>
+<p id="request-result"> </p>
+
+<p> Write a message to send to Charlie's iframe </p>
+
+
+<form id="BobForm">
+  <input type="text" id="BobMsg" value="Message">
+  <!-- This is important, sending data to the iframe! -->
+  <input type="submit" value="postMessage">
+</form>
+
+
+<img src="http://bob.com:9090/bob.gif" width="150">
+
+<script>
+COWL.enable();
+
+window.onload = function() {
+
+  var msg = document.getElementById("BobMsg");
+  msg.select();
+
+  var form = document.getElementById("BobForm"),
+  iframeWin = document.getElementById("Charlie").contentWindow;
+
+  form.onsubmit = function () {
+    iframeWin.postMessage(msg.value, "http://charlie.com:5050");
+    return false;
+  };
+}
+
+function displayMessage (evt) {
+	if (! evt.data.privacy) {
+		var message = evt.data + " &larr; " + evt.origin ;
+		document.getElementById("msg").innerHTML = message;
+	} else {
+		COWL.privacyLabel = COWL.privacyLabel.and(evt.data.privacy);
+		var message = evt.data.blob + " &#x219C; " + evt.origin ;
+		document.getElementById("msg").innerHTML = message;
+	}
+}
+
+window.addEventListener("message", displayMessage, false);
+
+var q_label = function() {
+	var label = COWL.privacyLabel.toString() ;
+	document.getElementById("BobLabel").innerHTML = label;
+};
+
+var xhr_bob = function() {
+	var xmlhttp = new XMLHttpRequest();
+	var url = "http://bob.com:9090/";
+
+	xmlhttp.onreadystatechange = function() {
+		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+			document.getElementById("request-result").innerHTML = "Pong!" ;
+    };
+	};
+
+	xmlhttp.open("GET", url, true);
+	xmlhttp.send();
+};
+</script>
+
+
+
+</body>
+
+</html>
